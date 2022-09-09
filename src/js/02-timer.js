@@ -9,7 +9,6 @@ const refs = {
   hoursEl: document.querySelector('[data-hours]'),
   minutesEl: document.querySelector('[data-minutes]'),
   secondsEl: document.querySelector('[data-seconds]'),
-  spanEl: document.querySelector('.value'),
 };
 
 let timerId = null;
@@ -52,7 +51,7 @@ function onGetTime() {
 }
 
 function onShowTimer({ days, hours, minutes, seconds }) {
-  refs.daysEL.textContent = onAddZero(days);
+  refs.daysEL.textContent = days;
   refs.hoursEl.textContent = onAddZero(hours);
   refs.minutesEl.textContent = onAddZero(minutes);
   refs.secondsEl.textContent = onAddZero(seconds);
