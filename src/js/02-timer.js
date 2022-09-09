@@ -52,7 +52,7 @@ function onGetTime() {
 }
 
 function onShowTimer({ days, hours, minutes, seconds }) {
-  refs.daysEL.value = onAddZero(days);
+  refs.daysEL.textContent = onAddZero(days);
   refs.hoursEl.textContent = onAddZero(hours);
   refs.minutesEl.textContent = onAddZero(minutes);
   refs.secondsEl.textContent = onAddZero(seconds);
