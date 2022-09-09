@@ -1,14 +1,32 @@
 const startBtn = document.querySelector('[data-start]');
 const stopBtn = document.querySelector('[data-stop]');
-startBtn.addEventListener('click', getRandomHexColor);
-stopBtn.addEventListener('click', getRandomHexColor);
+const bodyEl = document.querySelector('body');
+let timerId = null;
+const TIME_DELAY = 1000;
 
-console.log(startBtn);
-console.log(stopBtn);
+startBtn.addEventListener('click', startColorChange);
+stopBtn.addEventListener('click', stopColorChange);
 
-// setTimeout()
+function startColorChange() {
+  startBtn.disabled = true;
+  stopBtn.disabled = false;
+
+  timerId = setInterval(colorChangerHandler, TIME_DELAY);
+
+  colorChangerHandler();
+  console.log('start');
+}
+function stopColorChange() {
+  stopBtn.disabled = true;
+  startBtn.disabled = false;
+  clearInterval(timerId);
+  console.log('stop');
+}
+
+function colorChangerHandler() {
+  bodyEl.style.backgroundColor = getRandomHexColor();
+}
+
 function getRandomHexColor() {
   return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
 }
-
-
