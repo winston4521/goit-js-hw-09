@@ -1,1 +1,0 @@
-{"mappings":"AAAa,IAAIA,KAAK,KACtBC,QAAQC,IAAI,OAAQC","sources":["src/js/02-timer.js"],"sourcesContent":["const data = new Date(1000);\nconsole.log('data', date);\n"],"names":["Date","console","log","date"],"version":3,"file":"02-timer.72f197f7.js.map"}
