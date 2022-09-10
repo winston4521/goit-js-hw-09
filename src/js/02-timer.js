@@ -3,9 +3,9 @@ import 'flatpickr/dist/flatpickr.min.css';
 import Notiflix from 'notiflix';
 
 const refs = {
-  datePicker: document.querySelector('#datetime-picker'),
-  btnStart: document.querySelector('[data-start]'),
-  daysEL: document.querySelector('[data-days]'),
+  timePicker: document.querySelector('#datetime-picker'),
+  startBtn: document.querySelector('[data-start]'),
+  daysEl: document.querySelector('[data-days]'),
   hoursEl: document.querySelector('[data-hours]'),
   minutesEl: document.querySelector('[data-minutes]'),
   secondsEl: document.querySelector('[data-seconds]'),
@@ -14,49 +14,50 @@ const refs = {
 let timerId = null;
 let selectedDate = null;
 
-refs.btnStart.disabled = true;
+refs.startBtn.disabled = true;
+refs.startBtn.addEventListener('click', onTimerTrigger);
+
 const options = {
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
+  // ============IF ELSE================
   onClose(selectedDates) {
-    if (selectedDates[0].getTime() <= Date.now()) {
-      Notiflix.Notify.failure('Please choose a date in the future');
-    } else {
-      refs.btnStart.disabled = false;
-      Notiflix.Notify.success('Starting');
+    if (selectedDates[0].getTime() >= Date.now()) {
       selectedDate = selectedDates[0];
+      refs.startBtn.disabled = false;
+      Notiflix.Notify.success('Push the button');
+    } else {
+      Notiflix.Notify.failure('Please choose a date in the future');
     }
   },
 };
 
-flatpickr(refs.datePicker, options);
+flatpickr(refs.timePicker, options);
 
-refs.btnStart.addEventListener('click', onTimerTrigger);
-
+// ========Finding difference============
 function onTimerTrigger() {
-  timerId = setInterval(onGetTime, 1000);
+  timerId = setInterval(onDiffAmount, 1000);
 }
 
-function onGetTime() {
-  const timeDiff = Date.now() - selectedDate.getDate();
-  console.log(selectedDate.getDate());
-  if (timeDiff < 0) {
+function onDiffAmount() {
+  const timeMs = selectedDate.getTime() - Date.now();
+
+  if (timeMs < 0) {
     clearInterval(timerId);
     return;
   }
 
-  onShowTimer(convertMs(timeDiff));
+  updateTimer(convertMs(timeMs));
 }
-
-function onShowTimer({ days, hours, minutes, seconds }) {
-  refs.daysEL.textContent = days;
+// ===========Converting the time===============
+function updateTimer({ days, hours, minutes, seconds }) {
+  refs.daysEl.textContent = onAddZero(days);
   refs.hoursEl.textContent = onAddZero(hours);
   refs.minutesEl.textContent = onAddZero(minutes);
   refs.secondsEl.textContent = onAddZero(seconds);
 }
-
 function onAddZero(value) {
   return value.toString().padStart(2, '0');
 }
