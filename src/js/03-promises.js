@@ -32,7 +32,7 @@ function onFormSubmit(e) {
     delayEl += stepEl;
   }
 }
-
+// ============Create prom============
 function createPromise(position, delayEl) {
   return new Promise((resolve, reject) => {
     const shouldResolve = Math.random() > 0.3;
