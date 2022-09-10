@@ -15,6 +15,7 @@ let timerId = null;
 let selectedDate = null;
 
 refs.startBtn.disabled = true;
+
 refs.startBtn.addEventListener('click', onTimerTrigger);
 
 const options = {
@@ -27,6 +28,7 @@ const options = {
     if (selectedDates[0].getTime() >= Date.now()) {
       selectedDate = selectedDates[0];
       refs.startBtn.disabled = false;
+
       Notiflix.Notify.success('Push the button');
     } else {
       Notiflix.Notify.failure('Please choose a date in the future');
