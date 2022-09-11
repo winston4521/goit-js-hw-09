@@ -14,9 +14,8 @@ const refs = {
 let timerId = null;
 let selectedDate = null;
 
-refs.startBtn.disabled = true;
-
 refs.startBtn.addEventListener('click', onTimerTrigger);
+refs.startBtn.setAttribute('disabled', 'disabled');
 
 const options = {
   enableTime: true,
@@ -25,13 +24,12 @@ const options = {
   minuteIncrement: 1,
   // ============IF ELSE================
   onClose(selectedDates) {
-    if (selectedDates[0].getTime() >= Date.now()) {
-      selectedDate = selectedDates[0];
-      refs.startBtn.disabled = false;
-
-      Notiflix.Notify.success('Push the button');
-    } else {
+    if (selectedDates[0].getTime() <= Date.now()) {
       Notiflix.Notify.failure('Please choose a date in the future');
+    } else {
+      Notiflix.Notify.success('Push the button');
+      selectedDate = selectedDates[0];
+      refs.startBtn.removeAttribute('disabled');
     }
   },
 };
@@ -40,19 +38,23 @@ flatpickr(refs.timePicker, options);
 
 // ========Finding difference============
 function onTimerTrigger() {
-  timerId = setInterval(onDiffAmount, 1000);
+  timerId = setInterval(() => {
+    const diffDate = selectedDate - new Date();
+    refs.startBtn.setAttribute('disabled', 'disabled');
+    refs.timePicker.setAttribute('disabled', 'disabled');
+    stopTimeOut(diffDate);
+    const convertedMs = convertMs(diffDate);
+    updateTimer(convertedMs);
+  }, 1000);
 }
 
-function onDiffAmount() {
-  const timeMs = selectedDate.getTime() - Date.now();
-
-  if (timeMs < 0) {
+function stopTimeOut(diffDate) {
+  if (diffDate <= 1000) {
     clearInterval(timerId);
-    return;
+    refs.timePicker.removeAttribute('disabled');
   }
-
-  updateTimer(convertMs(timeMs));
 }
+
 // ===========Converting the time===============
 function updateTimer({ days, hours, minutes, seconds }) {
   refs.daysEl.textContent = onAddZero(days);
