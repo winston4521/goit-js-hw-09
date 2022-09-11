@@ -42,7 +42,7 @@ function onTimerTrigger() {
     const diffDate = selectedDate - new Date();
     refs.startBtn.setAttribute('disabled', 'disabled');
     refs.timePicker.setAttribute('disabled', 'disabled');
-    stopTimer(diffDate);
+    stopTimer(diffDate); 
     const convertedMs = convertMs(diffDate);
     updateTimer(convertedMs);
   }, 1000);

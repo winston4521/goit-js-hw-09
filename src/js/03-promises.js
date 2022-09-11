@@ -24,7 +24,7 @@ function onFormSubmit(e) {
         Notiflix.Notify.failure(
           `❌ Rejected promise ${position} in ${delayEl}ms`
         );
-      }, delayEl);
+      });
   }
   delayEl += stepEl;
 }
