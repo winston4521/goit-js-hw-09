@@ -42,13 +42,13 @@ function onTimerTrigger() {
     const diffDate = selectedDate - new Date();
     refs.startBtn.setAttribute('disabled', 'disabled');
     refs.timePicker.setAttribute('disabled', 'disabled');
-    stopTimeOut(diffDate);
+    stopTimer(diffDate);
     const convertedMs = convertMs(diffDate);
     updateTimer(convertedMs);
   }, 1000);
 }
 
-function stopTimeOut(diffDate) {
+function stopTimer(diffDate) {
   if (diffDate <= 1000) {
     clearInterval(timerId);
     refs.timePicker.removeAttribute('disabled');
