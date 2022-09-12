@@ -1,51 +1,56 @@
 import Notiflix from 'notiflix';
-// ===============================
+
 const refs = {
   formEl: document.querySelector('.form'),
-  DelayEL: document.querySelector('input[name="delay"]'),
-  stepEl: document.querySelector('input[name="step"]'),
+  delayEl: document.querySelector('input[name="delay"]'),
+  stemEl: document.querySelector('input[name="step"]'),
   amountEl: document.querySelector('input[name="amount"]'),
+};
+
+const notiflix = {
+  // timeout: 2800,
+  useIcon: false,
 };
 
 refs.formEl.addEventListener('submit', e => {
   e.preventDefault();
-  let { delay, step, amount } = onGettingData();
+  let { delay, step, amount } = onGettinData();
 
   for (let position = 1; position <= amount; position += 1) {
     createPromise(position, delay)
       .then(({ position, delay }) => {
         Notiflix.Notify.success(
-          `✅ Fulfilled promise ${position} in ${delay}ms`
+          `✅ Fulfilled promise ${position} in ${delay}ms`,
+          notiflix
         );
       })
       .catch(({ position, delay }) => {
         Notiflix.Notify.failure(
-          `❌ Rejected promise ${position} in ${delay}ms`
+          `❌ Rejected promise ${position} in ${delay}ms`,
+          notiflix
         );
       });
-    delay += step;
+    delay = delay + step;
   }
 });
 
-// ============Create prom============
 function createPromise(position, delay) {
   return new Promise((resolve, reject) => {
     const shouldResolve = Math.random() > 0.3;
-
-    setTimeout(delay => {
+    setTimeout(() => {
       if (shouldResolve) {
-        resolve({ position, delay });
+        resolve({ position: position, delay: delay });
       } else {
-        reject({ position, delay });
+        reject({ position: position, delay: delay });
       }
     }, delay);
   });
 }
 
-function onGettingData() {
+function onGettinData() {
   return {
-    delay: Number(refs.DelayEL.value),
-    step: Number(refs.stepEl.value),
+    delay: Number(refs.delayEl.value),
+    step: Number(refs.stemEl.value),
     amount: Number(refs.amountEl.value),
   };
 }
