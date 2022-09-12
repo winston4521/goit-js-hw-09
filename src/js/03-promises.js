@@ -7,27 +7,26 @@ const refs = {
   amountEl: document.querySelector('input[name="amount"]'),
 };
 
-const notiflix = {
-
+const notifying = {
   useIcon: false,
 };
 
 refs.formEl.addEventListener('submit', e => {
   e.preventDefault();
-  let { delay, step, amount } = onGettinData();
+  let { delay, step, amount } = onGettingData();
 
   for (let position = 1; position <= amount; position += 1) {
     createPromise(position, delay)
       .then(({ position, delay }) => {
         Notiflix.Notify.success(
           `✅ Fulfilled promise ${position} in ${delay}ms`,
-          notiflix
+          notifying
         );
       })
       .catch(({ position, delay }) => {
         Notiflix.Notify.failure(
           `❌ Rejected promise ${position} in ${delay}ms`,
-          notiflix
+          notifying
         );
       });
     delay = delay + step;
@@ -47,7 +46,7 @@ function createPromise(position, delay) {
   });
 }
 
-function onGettinData() {
+function onGettingData() {
   return {
     delay: Number(refs.delayEl.value),
     step: Number(refs.stemEl.value),
