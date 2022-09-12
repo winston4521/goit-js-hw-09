@@ -8,7 +8,7 @@ const refs = {
 };
 
 const notiflix = {
-  // timeout: 2800,
+
   useIcon: false,
 };
 
