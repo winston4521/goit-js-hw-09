@@ -29,7 +29,7 @@ refs.formEl.addEventListener('submit', e => {
           notifying
         );
       });
-    delay = delay + step;
+    delay += step;
   }
 });
 
