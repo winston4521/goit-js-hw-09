@@ -2,66 +2,66 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import Notiflix from 'notiflix';
 
-const refs = {
-  timePicker: document.querySelector('#datetime-picker'),
-  startBtn: document.querySelector('[data-start]'),
-  daysEl: document.querySelector('[data-days]'),
-  hoursEl: document.querySelector('[data-hours]'),
-  minutesEl: document.querySelector('[data-minutes]'),
-  secondsEl: document.querySelector('[data-seconds]'),
-};
-
+const timePicker = document.querySelector('#datetime-picker');
+const startBtn = document.querySelector('[data-start]');
+const daysEl = document.querySelector('[data-days]');
+const hoursEl = document.querySelector('[data-hours]');
+const minutesEl = document.querySelector('[data-minutes]');
+const secondsEl = document.querySelector('[data-seconds]');
 let timerId = null;
 let selectedDate = null;
 
-refs.startBtn.addEventListener('click', onTimerTrigger);
-refs.startBtn.setAttribute('disabled', 'disabled');
-
+// ========Finding difference============
 const options = {
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
-  // ============IF ELSE================
   onClose(selectedDates) {
-    if (selectedDates[0].getTime() <= Date.now()) {
+    if (selectedDates[0] <= Date.now()) {
       Notiflix.Notify.failure('Please choose a date in the future');
+      startBtn.disabled = true;
     } else {
-      Notiflix.Notify.success('Push the button');
+      Notiflix.Notify.success('You Can press it)');
+      startBtn.disabled = false;
       selectedDate = selectedDates[0];
-      refs.startBtn.removeAttribute('disabled');
+      console.log(selectedDate.getTime());
     }
   },
 };
 
-flatpickr(refs.timePicker, options);
+flatpickr(timePicker, options);
 
-// ========Finding difference============
-function onTimerTrigger() {
+startBtn.addEventListener('click', onTimerStart);
+
+function onTimerStart() {
   timerId = setInterval(() => {
-    const diffDate = selectedDate - new Date();
-    refs.startBtn.setAttribute('disabled', 'disabled');
-    refs.timePicker.setAttribute('disabled', 'disabled');
-    stopTimer(diffDate); 
-    const convertedMs = convertMs(diffDate);
-    updateTimer(convertedMs);
+    const difference = selectedDate.getTime() - Date.now();
+    timePicker.disabled = true;
+    startBtn.disabled = true;
+    onTimeStop(difference);
+    const convertedMs = convertMs(difference);
+    onTimeConvert(convertedMs);
   }, 1000);
 }
 
-function stopTimer(diffDate) {
-  if (diffDate <= 1000) {
+function onTimeStop(difference) {
+  if (difference <= 1000) {
     clearInterval(timerId);
-    refs.timePicker.removeAttribute('disabled');
+    startBtn.disabled = false;
+    timePicker.disabled = true;
   }
 }
 
 // ===========Converting the time===============
-function updateTimer({ days, hours, minutes, seconds }) {
-  refs.daysEl.textContent = onAddZero(days);
-  refs.hoursEl.textContent = onAddZero(hours);
-  refs.minutesEl.textContent = onAddZero(minutes);
-  refs.secondsEl.textContent = onAddZero(seconds);
+
+function onTimeConvert({ days, hours, minutes, seconds }) {
+  daysEl.textContent = onAddZero(days);
+  hoursEl.textContent = onAddZero(hours);
+  minutesEl.textContent = onAddZero(minutes);
+  secondsEl.textContent = onAddZero(seconds);
 }
+
 function onAddZero(value) {
   return value.toString().padStart(2, '0');
 }
