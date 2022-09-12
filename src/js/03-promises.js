@@ -1,45 +1,51 @@
 import Notiflix from 'notiflix';
 // ===============================
-const formEl = document.querySelector('.form');
-formEl.addEventListener('submit', onFormSubmit);
-// =============================================
+const refs = {
+  formEl: document.querySelector('.form'),
+  DelayEL: document.querySelector('input[name="delay"]'),
+  stepEl: document.querySelector('input[name="step"]'),
+  amountEl: document.querySelector('input[name="amount"]'),
+};
 
-function onFormSubmit(e) {
+refs.formEl.addEventListener('submit', e => {
   e.preventDefault();
-  // ========================
-  let delayEl = Number(e.currentTarget.delay.value);
-  let stepEl = Number(e.currentTarget.step.value);
-  let amountEl = Number(e.currentTarget.amount.value);
+  let { delay, step, amount } = onGettingData();
 
-  // ====Цикл==========
-
-  for (let position = 1; position <= amountEl; position += 1) {
-    createPromise(position, delayEl)
-      .then(({ position, delayEl }) => {
+  for (let position = 1; position <= amount; position += 1) {
+    createPromise(position, delay)
+      .then(({ position, delay }) => {
         Notiflix.Notify.success(
-          `✅ Fulfilled promise ${position} in ${delayEl}ms`
+          `✅ Fulfilled promise ${position} in ${delay}ms`
         );
       })
-      .catch(({ position, delayEl }) => {
+      .catch(({ position, delay }) => {
         Notiflix.Notify.failure(
-          `❌ Rejected promise ${position} in ${delayEl}ms`
+          `❌ Rejected promise ${position} in ${delay}ms`
         );
       });
+    delay += step;
   }
-  delayEl += stepEl;
-}
+});
 
 // ============Create prom============
-function createPromise(position, delayEl) {
+function createPromise(position, delay) {
   return new Promise((resolve, reject) => {
     const shouldResolve = Math.random() > 0.3;
 
-    setTimeout(delayEl => {
+    setTimeout(delay => {
       if (shouldResolve) {
-        resolve({ position, delayEl });
+        resolve({ position, delay });
       } else {
-        reject({ position, delayEl });
+        reject({ position, delay });
       }
-    }, delayEl);
+    }, delay);
   });
+}
+
+function onGettingData() {
+  return {
+    delay: Number(refs.DelayEL.value),
+    step: Number(refs.stepEl.value),
+    amount: Number(refs.amountEl.value),
+  };
 }
